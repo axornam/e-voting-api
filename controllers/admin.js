@@ -42,12 +42,10 @@ module.exports = {
       // if the candidate was saved successfully
       if (candidate != null) {
         // send success message
-        res
-          .status(201)
-          .json({
-            message: "Candidate Added Successfully to Elections",
-            data: candidate,
-          });
+        res.status(201).json({
+          message: "Candidate Added Successfully to Elections",
+          data: candidate,
+        });
       } else {
         // send error message
         res.status(400).json({
@@ -66,7 +64,7 @@ module.exports = {
   // Get All Candidates
   async getCandidates(req, res) {
     try {
-      let candidates = Candidate.find();
+      let candidates = await Candidate.find({});
       if (candidates) {
         res.status(200).json({ message: "Success", data: candidates });
       } else {
@@ -83,7 +81,7 @@ module.exports = {
   // Put / Edit One Candidate
   async putCandidate(req, res) {
     try {
-      let candidate = Candidate.findOne({
+      let candidate = await Candidate.findOne({
         candidate_id: req.params.candidate_id,
       });
 
@@ -98,7 +96,7 @@ module.exports = {
       candidate.email = req.body.email;
 
       // Save New Candidate
-      candidate = await candidate.save();
+      await candidate.save();
 
       if (candidate != null) {
         res.status(201).json({ message: "", data: candidate });
