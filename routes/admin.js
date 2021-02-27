@@ -12,12 +12,20 @@ const {
   postLogin,
   getRegister,
   postRegister,
+  postCandidate,
+  getCandidates,
 } = require("../controllers/admin");
 
 /* POST /voter */
 router.get("/register", getRegister);
 
 /* POST /candidate */
+router.post("/candidates", postCandidate);
+
+/* GET /candidate */
+router.get("/candidates", getCandidates);
+
+/* POST /register */
 router.post("/register", postRegister);
 
 /* POST /login */

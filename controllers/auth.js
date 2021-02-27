@@ -38,9 +38,14 @@ module.exports = {
 
         if (result) {
           // if the user is successfully saved
-          res.status(201).send({});
+          res.status(201).send({ message: "Registration Successfull" });
         } else {
-          res.status(400).send({});
+          res
+            .status(400)
+            .send({
+              message:
+                "Error while Creating Your Account, Please Try Again Later",
+            });
         }
       }
     } catch (e) {
