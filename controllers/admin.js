@@ -44,7 +44,10 @@ module.exports = {
         // send success message
         res
           .status(201)
-          .json({ message: "Candidate Added Successfully to Elections" });
+          .json({
+            message: "Candidate Added Successfully to Elections",
+            data: candidate,
+          });
       } else {
         // send error message
         res.status(400).json({
