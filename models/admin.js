@@ -3,9 +3,9 @@ const Schema = mongoose.Schema;
 
 const AdminSchema = new Schema({
   email: String,
-  category: String,
+  admin_id: String,
   type: {
-    default: "Admin",
+    default: "admin",
     type: String,
   },
 });
