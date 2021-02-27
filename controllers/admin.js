@@ -3,8 +3,11 @@ const uuid = require("uuid");
 const { getCandidates } = require(".");
 
 module.exports = {
-  postLogin(req, res) {},
-  postRegister(req, res) {},
+  // Login to Admin
+  async postLogin(req, res) {
+    //
+  },
+
   // Add a new Candidate
   async postCandidate(req, res) {
     try {
@@ -57,11 +60,12 @@ module.exports = {
     }
   },
 
+  // Get All Candidates
   async getCandidates(req, res) {
     try {
       let candidates = Candidate.find();
       if (candidates) {
-        res.status(200).json(candidates);
+        res.status(200).json({ message: "Success", data: candidates });
       } else {
         res
           .status(404)
@@ -72,8 +76,60 @@ module.exports = {
       console.error(error);
     }
   },
-  getRegister(req, res) {},
-  postVerify(req, res) {},
+
+  // Put / Edit One Candidate
+  async putCandidate(req, res) {
+    try {
+      let candidate = Candidate.findOne({
+        candidate_id: req.params.candidate_id,
+      });
+
+      console.log("FOUND: ", candidate);
+
+      // Edit Candidate Details
+      candidate.first_name = req.body.first_name;
+      candidate.last_name = req.body.last_name;
+      candidate.image = req.body.image;
+      candidate.color = req.body.color;
+      candidate.position = req.body.position;
+      candidate.email = req.body.email;
+
+      // Save New Candidate
+      candidate = await candidate.save();
+
+      if (candidate != null) {
+        res.status(201).json({ message: "", data: candidate });
+      } else {
+        res.status(400).json({
+          message: `Could Not Update Candidate with ID: ${candidate.candidate_id}`,
+        });
+      }
+    } catch (error) {
+      //
+      console.error(error);
+      res.status(500).json({ message: "The Server Responsed with An Error" });
+    }
+  },
+
+  // GET One Candidate
+  async getCandidate(req, res) {
+    try {
+      // find candidates with position / category type
+      let candidate = await Candidate.find({
+        candidate_id: req.params.candidate_id,
+      });
+      if (candidate != null) {
+        res.status(200).json({ message: "", data: candidate });
+      } else {
+        res.status(404).json({ message: "Candidate Not Found" });
+      }
+    } catch (e) {
+      console.log(e);
+    }
+  },
+
+  // Add a new Voter
+  postVoter(req, res) {},
   getLogout(req, res) {},
   getForgot(req, res) {},
   putForgot(req, res) {},

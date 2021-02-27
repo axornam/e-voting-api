@@ -2,22 +2,20 @@ const express = require("express");
 const router = express.Router();
 const multer = require("multer");
 const upload = multer({ dest: "uploads/" });
-const { asyncErrorHandler } = require("../middleware"); // automatically find the index file for this directory
+const { asyncErrorHandler } = require("../middleware");
 const {
   getReset,
   putReset,
-  getLogout,
   putForgot,
   getForgot,
+  getLogout,
   postLogin,
-  getRegister,
-  postRegister,
+  postVoter,
   postCandidate,
   getCandidates,
+  getCandidate,
+  putCandidate,
 } = require("../controllers/admin");
-
-/* POST /voter */
-router.get("/register", getRegister);
 
 /* POST /candidate */
 router.post("/candidates", postCandidate);
@@ -25,8 +23,14 @@ router.post("/candidates", postCandidate);
 /* GET /candidate */
 router.get("/candidates", getCandidates);
 
-/* POST /register */
-router.post("/register", postRegister);
+/* GET /candidate/:id */
+router.get("/candidates/:candidate_id", getCandidate);
+
+/* PUT /candidate/:id */
+router.put("/candidates/:candidate_id", putCandidate);
+
+/* POST /voter */
+router.post("/voter", postVoter);
 
 /* POST /login */
 router.post("/login", postLogin);
