@@ -84,7 +84,7 @@ module.exports = {
           await new BallotPaper({
             voter_id: user.voter_id,
             voter_email: user.email,
-          });
+          }).save();
 
           // Send Success Message and the user Token
           return res.status(200).json({
