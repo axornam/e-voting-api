@@ -3,27 +3,23 @@ const router = express.Router();
 const { asyncErrorHandler } = require("../middleware");
 const {
   getHome,
-  getPolls,
   getResults,
-  putCategory,
-  getCategories,
-  getNextCategory,
+  putPosition,
+  getPositions,
+  getNextPosition,
 } = require("../controllers/index");
 
 /* GET home page. */
 router.get("/", getHome);
 
 /* GET /categories */
-router.get("/categories", getCategories);
+router.get("/positions", getPositions);
 
 /* GET /category */
-router.get("/category", getNextCategory);
+router.get("/positions/:id", getNextPosition);
 
 /* post /category */
-router.put("/category", putCategory);
-
-/* GET /polls  */
-router.get("/polls", getPolls);
+router.put("/position", putPosition);
 
 /* GET /results  */
 router.get("/results", getResults);
