@@ -2,6 +2,7 @@ require("dotenv").config();
 const uuid = require("uuid");
 const bcrypt = require("bcrypt");
 const Voter = require("../models/voter");
+const BallotPaper = require("../models/ballot_paper");
 
 module.exports = {
   // REGISTER A NEW USER
@@ -35,10 +36,18 @@ module.exports = {
 
         // save the new user to mongodb
         let result = await newVoter.save();
+        let temp_data = {};
+        temp_data.first_name = result.first_name;
+        temp_data.last_name = result.last_name;
+        temp_data.phone = result.phone;
+        temp_data.email = result.email;
+        temp_data.voter_id = result.voter_id;
 
         if (result) {
           // if the user is successfully saved
-          res.status(201).send({ message: "Registration Successfull" });
+          res
+            .status(201)
+            .send({ message: "Registration Successfull", data: temp_data });
         } else {
           res.status(400).send({
             message:
@@ -65,35 +74,43 @@ module.exports = {
         voter_id: req.body.voter_id,
       });
 
-      if (user) {
+      if (user != null) {
         // if the user exists then
         // compare userpassword with hashed password
         let result = await bcrypt.compare(req.body.password, user.password);
+        // if the user password is valid
         if (result) {
-          // if the user password is valid
+          //  create a new ballot paper with the voters creds
+          await new BallotPaper({
+            voter_id: user.voter_id,
+            voter_email: user.email,
+          });
+
           // Send Success Message and the user Token
-          res.status(200).json({
+          return res.status(200).json({
             message: "Authentication Successfull",
-            token: access_token,
+            token: "",
           });
         } else {
           // if the user password is wrong then
           // send a 401 unauthorized error
-          res
+          return res
             .status(401)
             .json({ message: "Invalid Email and Password Combinations" });
         }
       } else {
         // if the user doesn't exists
         // return a 404 not found
-        res.status(404).json({
+        return res.status(404).json({
           message:
             "No User with email - voter id combo found, Please Contact Your Admin",
         });
       }
     } catch (error) {
       console.error(error);
-      res.status(500).json({ message: "Server Responded with An Error" });
+      return res
+        .status(500)
+        .json({ message: "Server Responded with An Error" });
     }
   },
   // LOGOUT A NEW USER
