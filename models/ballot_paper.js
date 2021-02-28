@@ -4,7 +4,6 @@ const Schema = mongoose.Schema;
 const BallotPaperSchema = new Schema({
   voter_id: String,
   voter_email: String,
-
   categories: [
     {
       position: String,
