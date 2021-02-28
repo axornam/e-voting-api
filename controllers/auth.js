@@ -11,7 +11,7 @@ module.exports = {
       let usr = await Voter.findOne({
         email: req.body.email,
         voter_id: req.body.voter_id,
-      });
+      }).select("-password");
 
       // if the user already exists
       if (usr) {
@@ -40,12 +40,10 @@ module.exports = {
           // if the user is successfully saved
           res.status(201).send({ message: "Registration Successfull" });
         } else {
-          res
-            .status(400)
-            .send({
-              message:
-                "Error while Creating Your Account, Please Try Again Later",
-            });
+          res.status(400).send({
+            message:
+              "Error while Creating Your Account, Please Try Again Later",
+          });
         }
       }
     } catch (e) {
@@ -62,15 +60,15 @@ module.exports = {
   async postLogin(req, res) {
     try {
       // Check if User Exists with same email and voter_id
-      let usr = await Voter.findOne({
+      let user = await Voter.findOne({
         email: req.body.email,
         voter_id: req.body.voter_id,
       });
 
-      if (usr) {
+      if (user) {
         // if the user exists then
         // compare userpassword with hashed password
-        let result = await bcrypt.compare(req.body.password, usr.password);
+        let result = await bcrypt.compare(req.body.password, user.password);
         if (result) {
           // if the user password is valid
           // Send Success Message and the user Token
