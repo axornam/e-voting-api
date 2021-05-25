@@ -7,6 +7,7 @@ const {
   putPosition,
   getPositions,
   getNextPosition,
+  getResultsWithID,
 } = require("../controllers/index");
 
 /* GET home page. */
@@ -19,9 +20,12 @@ router.get("/positions", getPositions);
 router.get("/positions/:id", getNextPosition);
 
 /* post /category */
-router.put("/position", putPosition);
+router.put("/positions", putPosition);
 
 /* GET /results  */
 router.get("/results", getResults);
+
+/* GET /results/:id */
+router.get("/results/:id", getResultsWithID);
 
 module.exports = router;

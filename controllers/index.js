@@ -1,6 +1,6 @@
+const BallotPaper = require("../models/ballot_paper");
 const Candidate = require("../models/candidate");
 const Voter = require("../models/voter");
-const BallotPaper = require("../models/ballot_paper");
 
 module.exports = {
   // Get Home Details
@@ -107,13 +107,49 @@ module.exports = {
     }
   },
 
-  // Get Candidates from Category With :ID
-  getCandidates(req, res) {
-    //
+  // Get Elections Results for Category With :ID
+  async getResults(req, res) {
+    try {
+      // Get All Ballot Papers
+      let papers = await BallotPaper.find();
+      // results array to hold position, winner and vice
+      let results = {};
+      let ids = {};
+      //
+      if (papers != null) {
+        // Iterate over Each Ballot Paper Gotten from DB
+        for (const paper of papers) {
+          // Collate Results for Each Category
+          for (const cat of paper.categories) {
+            // Calculate Total results for Each Category
+            if (ids[cat.candidate_id] == null) {
+              ids[cat.candidate_id] = 1;
+            } else {
+              // Increment Counter for Each Candidate In Each Position
+              ids[cat.candidate_id] += 1;
+            }
+            // assign temp ids to collation results
+            results[cat.position] = ids;
+          }
+          // null the temp array
+          ids = {};
+
+          console.log(results);
+        }
+        // Format Entries into an Object
+        // Send JSON data
+        return res
+          .status(200)
+          .json({ message: "Collated Election Results", data: papers });
+      } else {
+        // if not ballot papers were found
+      }
+    } catch (error) {
+      console.log(error);
+      return res.json(500).json({ message: error });
+    }
   },
 
-  // Get Elections Results for Category With :ID
-  getResults(req, res) {
-    //
-  },
+  // Get Results For One Category
+  getResultsWithID(req, res) {},
 };
