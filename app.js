@@ -4,6 +4,7 @@ const logger = require("morgan");
 const createError = require("http-errors");
 const cookieParser = require("cookie-parser");
 const mongoose = require("mongoose");
+const path = require("path");
 
 const app = express();
 
@@ -38,9 +39,15 @@ mongoose.connection.once("open", () => {
 
 // configure express server
 app.use(logger("dev"));
+app.use(cookieParser());
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
-app.use(cookieParser());
+
+// setup static directory
+app.use(
+  "/public",
+  express.static(path.join(__dirname, "public"), { dotfiles: "ignore" })
+);
 
 // Mount routes
 app.use("/", require("./routes/index"));

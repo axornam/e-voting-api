@@ -23,6 +23,9 @@ module.exports = {
         // exit the function
       }
 
+      if (!req.file)
+        return res.status(401).json({ message: "No File was Uploaded" });
+
       // build url for storing images
       let image_url = `${req.protocol}://${req.get("host")}/public/uploads/${
         req.file.filename
