@@ -1,6 +1,5 @@
 const Candidate = require("../models/candidate");
 const uuid = require("uuid");
-const { getCandidates } = require(".");
 
 module.exports = {
   // Login to Admin
@@ -18,19 +17,23 @@ module.exports = {
       // if there are existing candidates with such email;
       if (candidate.length > 0) {
         // send error status
-        res
+        return res
           .status(401)
           .json({ message: "A Candidate with that e-mail already exists" });
         // exit the function
-        return;
       }
+
+      // build url for storing images
+      let image_url = `${req.protocol}://${req.get("host")}/public/uploads/${
+        req.file.filename
+      }`;
 
       // save new candidate into database
       candidate = await new Candidate({
         first_name: req.body.first_name,
         last_name: req.body.last_name,
         color: req.body.color,
-        image: req.body.image,
+        image: image_url,
         position: req.body.position,
         email: req.body.email,
         candidate_id: uuid.v4(),
@@ -85,12 +88,13 @@ module.exports = {
         candidate_id: req.params.candidate_id,
       });
 
+      let image_url = `${req.protocol}://${req.baseUrl}/public/uploads/${req.body.image}`;
       console.log("FOUND: ", candidate);
 
       // Edit Candidate Details
       candidate.first_name = req.body.first_name;
       candidate.last_name = req.body.last_name;
-      candidate.image = req.body.image;
+      candidate.image = image_url;
       candidate.color = req.body.color;
       candidate.position = req.body.position;
       candidate.email = req.body.email;

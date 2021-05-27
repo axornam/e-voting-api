@@ -151,5 +151,5 @@ module.exports = {
   },
 
   // Get Results For One Category
-  getResultsWithID(req, res) {},
+  getCategoryResults(req, res) {},
 };

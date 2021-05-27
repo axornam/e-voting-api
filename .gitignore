@@ -2,3 +2,5 @@
 .env
 .vscode
 /uploads
+/public
+.swp

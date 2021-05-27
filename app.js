@@ -42,9 +42,6 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(cookieParser());
 
-// require models
-const Voter = require("./models/voter");
-
 // Mount routes
 app.use("/", require("./routes/index"));
 app.use("/auth", require("./routes/auth"));
@@ -63,7 +60,7 @@ app.use(function (err, req, res, next) {
 
   // render the error page
   res.status(err.status || 500);
-  res.render("error");
+  res.send("error");
 });
 
 module.exports = app;
