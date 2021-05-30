@@ -56,7 +56,13 @@ module.exports = {
       // if the voter exists
       if (voter != null) {
         // and has not yet voted for this category
-        if (true) {
+
+        let ballot = await BallotPaper.find({
+          voter_id: req.body.voter_id,
+          voter_email: req.body.voter_email,
+        });
+
+        if (ballot == null || ballot.length === 0) {
           // Get Candidate with Candidate ID and Postion
           let candidate = await Candidate.find({
             email: req.body.candidate_email,
