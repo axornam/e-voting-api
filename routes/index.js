@@ -5,7 +5,6 @@ const {
   getHome,
   getResults,
   putPosition,
-  getPositions,
   getNextPosition,
   getCategoryResults,
 } = require("../controllers/index");
@@ -14,7 +13,7 @@ const {
 router.get("/", getHome);
 
 /* GET /categories */
-router.get("/positions", getPositions);
+// router.get("/positions", getPositions);
 
 /* GET /category */
 router.get("/positions/:id", getNextPosition);

@@ -4,13 +4,17 @@ const Voter = require("../models/voter");
 
 module.exports = {
   // Get Home Details
-  getHome(req, res) {
-    //
-  },
-
-  // Get All Categories
-  getPositions(req, res) {
-    //
+  async getHome(req, res) {
+    // fetch all candidates from database
+    try {
+      let candidates = await Candidate.find({});
+      if (candidates != null && candidates.length > 0) {
+        return res.status(200).json({ message: "", data: candidates });
+      }
+    } catch (e) {
+      console.log(e);
+      return res.status(404).json({ message: "No candidate found", data: {} });
+    }
   },
 
   // Get Next Category With :ID
